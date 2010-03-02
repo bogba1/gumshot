@@ -22,6 +22,7 @@ class OgreApplication : public StandardApplication
 		void					createFrameListener(void);
 		void					createLights(void);
 
-		OgreNewt::World*		_world;
+		OgreNewt::World*				_world;
+		OgreNewt::BasicFrameListener*	_physicFrameListener;
 
 };
