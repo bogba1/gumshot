@@ -54,6 +54,24 @@ void OgreApplication::createScene()
 	_body->attachNode(_node); //attaching level node to rigidbody(collision shaped)
 	_body->setPositionOrientation(Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
 
+	_entity = _sceneManager->createEntity("gs_cube", "cube.mesh");
+	_entity->setCastShadows(true);
+	_node = _sceneManager->getRootSceneNode()->createChildSceneNode("gs_cube"); //_sceneManager->createSceneNode("nodeHallo");
+	_node->attachObject(_entity);
+	_node->setScale(0.01,0.01,0.01);
+	_node->setPosition(0,0,0);
+
+	ConvexCollisionPtr _colShapeBox = ConvexCollisionPtr(new CollisionPrimitives::Box(_world,Vector3(1,1,1),1));
+	_body = new OgreNewt::Body(_world, _colShapeBox); //creating rigidBody -> has mass, size, and shape; interacts with other rigidBodys WHY DO NOT DEREFERENCING _levelColShape for CollisionPtr& col ?!?! -> reference! 
+	Vector3 _inertia, _offset;
+	_colShapeBox->calculateInertialMatrix(_inertia, _offset);
+	_body->setMassMatrix(10, (10 * _inertia));
+	_body->setCenterOfMass(_offset);
+	_body->attachNode(_node); //attaching level node to rigidbody(collision shaped)
+	_body->setPositionOrientation(Ogre::Vector3(4, 9, 0), Ogre::Quaternion::IDENTITY);
+	_body->setStandardForceCallback();
+	
+
 	Ogre::MovablePlane* _plane = new Ogre::MovablePlane("Plane");
 	_plane->d = 0;
 	_plane->normal = Vector3::UNIT_Y;
@@ -73,7 +91,10 @@ void OgreApplication::createScene()
 void OgreApplication::createFrameListener()
 {
 	_frameListener = new OgreApplicationFrameListener(_sceneManager, _window, _camera);
+	_physicFrameListener = new OgreNewt::BasicFrameListener(_window, _world);
+
 	_root->addFrameListener(_frameListener);
+	_root->addFrameListener(_physicFrameListener);
 }
 
 //------------------------------------------------------

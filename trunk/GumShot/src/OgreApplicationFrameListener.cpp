@@ -15,6 +15,7 @@ bool OgreApplicationFrameListener::frameStarted(const FrameEvent& evt)
 	_timer += evt.timeSinceLastFrame;
 	double _dt = evt.timeSinceLastFrame;
 
+	
 	//rotating cube dings
 	Node* _node = _sceneManager->getRootSceneNode()->getChild("gs_ball_machine_node");
 	Vector3 _vec = Vector3(.2+sin(_timer), cos(_timer), .4+sin(_timer));
@@ -38,6 +39,9 @@ bool OgreApplicationFrameListener::frameEnded(const FrameEvent& evt)
 
 bool OgreApplicationFrameListener::processUnbufferedKeyInput(const Ogre::FrameEvent &evt)
 {
+	if(mKeyboard->isKeyDown(OIS::KC_G)){
+	}
+
 	return StandardFrameListener::processUnbufferedKeyInput(evt);
 }
 
