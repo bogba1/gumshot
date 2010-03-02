@@ -1,9 +1,9 @@
 #ifndef __StandardFrameListener_H__
 #define __StandardFrameListener_H__
 
-#include "OGRE/Ogre.h"
-#include "OGRE/OgreStringConverter.h"
-#include "OGRE/OgreException.h"
+#include "Ogre.h"
+#include "OgreStringConverter.h"
+#include "OgreException.h"
 
 //Use this define to signify OIS will be used as a DLL
 //(so that dll import/export macros are in effect)
