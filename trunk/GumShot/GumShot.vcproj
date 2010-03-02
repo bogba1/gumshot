@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="OGRE_example"
+	Name="GumShot"
 	ProjectGUID="{D25DAAF4-A15E-4886-B69D-1F6213D2C2B3}"
 	RootNamespace="ogre_uebung"
 	TargetFrameworkVersion="196613"
