@@ -1,8 +1,8 @@
 #ifndef __StandardApplication_H__
 #define __StandardApplication_H__
 
-#include "OGRE/Ogre.h"
-#include "OGRE/OgreConfigFile.h"
+#include "Ogre.h"
+#include "OgreConfigFile.h"
 #include "StandardFrameListener.h"
 #include "Resource.h"
 

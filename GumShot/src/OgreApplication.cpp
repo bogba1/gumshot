@@ -1,9 +1,11 @@
 #include "OgreApplication.h"
 
+using namespace OgreNewt;
+
 OgreApplication::OgreApplication() 
 : StandardApplication()
 {
-
+	_world = new World();
 }
 
 //------------------------------------------------------
@@ -50,6 +52,13 @@ void OgreApplication::createScene()
 	_node = _sceneManager->getRootSceneNode()->createChildSceneNode("cubeNode");
 	_node->attachObject(_entity);
 	_node->setPosition(0,0,0);
+
+	CollisionPrimitives::TreeCollisionSceneParser* _colShape = new CollisionPrimitives::TreeCollisionSceneParser(_world);
+	_colShape->parseScene(_node,1);
+	OgreNewt::Body* _body = new OgreNewt::Body(_world, CollisionPtr(_colShape)); //creating rigidBody -> has mass, size, and shape; interacts with other rigidBodys WHY DO NOT DEREFERENCING _levelColShape for CollisionPtr& col ?!?! -> reference! 
+	_body->attachNode(_node); //attaching level node to rigidbody(collision shaped)
+	_body->setPositionOrientation(Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
+
 }
 
 //------------------------------------------------------
