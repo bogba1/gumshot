@@ -3,6 +3,7 @@
 #include "StandardApplication.h"
 #include "OgreApplicationFrameListener.h"
 #include <OgreNewt.h>
+#include "GS_Callbacks.h"
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
 #include "../res/resource.h"
@@ -34,5 +35,7 @@ class OgreApplication : public StandardApplication
 		MaterialID*				_matResponsePoint;
 		MaterialID*				_matInnerBarricade;
 		MaterialID*				_matGums;
+		CBGumResponsePnt		_gumBarricadeResp;
+		CBGumGumResponse		_gumGumResp;
 
 };

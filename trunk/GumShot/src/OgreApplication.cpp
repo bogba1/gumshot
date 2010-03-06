@@ -6,6 +6,7 @@ OgreApplication::OgreApplication()
 : StandardApplication()
 {
 	_world = new World();
+	_world->setThreadCount(50);
 	_matGums = new MaterialID(_world);
 	_matInnerBarricade = new MaterialID(_world);
 	_matResponsePoint = new MaterialID(_world);
@@ -53,7 +54,9 @@ void OgreApplication::createScene()
 	_sceneManager->setShadowFarDistance(1000);
 	setupGumMachines();
 	setupBubbleGums( 1, 10, Vector3(0, 18, 0 ), "gs_gummachine_1" );
-
+	
+	createMaterialPair(_matGums, _matResponsePoint, &_gumBarricadeResp, 0.3f, 0.5f, 0.08f, 0.08f);
+	createMaterialPair(_matGums, _matGums, &_gumGumResp, 0, 0, 0.3f, 0.2f);
 
 /*
 	Ogre::MovablePlane* _plane = new Ogre::MovablePlane("Plane");
