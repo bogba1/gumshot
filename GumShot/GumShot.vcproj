@@ -215,6 +215,18 @@
 				RelativePath=".\src\OgreApplicationFrameListener.cpp"
 				>
 			</File>
+			<Filter
+				Name="CCallback"
+				>
+				<File
+					RelativePath=".\src\CBGumGumResponse.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\CBGumResponsePnt.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Headerdateien"
@@ -266,6 +278,22 @@
 				</File>
 				<File
 					RelativePath=".\include\ThreadPool\ThreadPool.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="CCallback"
+				>
+				<File
+					RelativePath=".\include\CBGumGumResponse.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\CBGumResponsePnt.h"
+					>
+				</File>
+				<File
+					RelativePath=".\GS_Callbacks.h"
 					>
 				</File>
 			</Filter>
