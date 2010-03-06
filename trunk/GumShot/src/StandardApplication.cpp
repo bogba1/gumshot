@@ -16,10 +16,12 @@ StandardApplication::StandardApplication()
 //---------------------------------------------------------------------------
 StandardApplication::~StandardApplication()
 {
-    if (_frameListener)
-        delete _frameListener;
-    if (_root)
-        delete _root;
+
+	if (_frameListener)
+		delete _frameListener;
+	if (_root)
+		delete _root;
+
 }
 
 //---------------------------------------------------------------------------

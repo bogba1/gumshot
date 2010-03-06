@@ -1,4 +1,5 @@
 #include "OgreApplicationFrameListener.h"
+#include "DataManager.h"
 
 OgreApplicationFrameListener::OgreApplicationFrameListener(SceneManager* sceneManager, RenderWindow* window, Camera *cam)
 : StandardFrameListener(window, cam)
@@ -17,13 +18,13 @@ bool OgreApplicationFrameListener::frameStarted(const FrameEvent& evt)
 
 	
 	//rotating cube dings
-	Node* _node = _sceneManager->getRootSceneNode()->getChild("gs_ball_machine_node");
-	Vector3 _vec = Vector3(.2+sin(_timer), cos(_timer), .4+sin(_timer));
+	//Node* _node = _sceneManager->getRootSceneNode()->getChild("gs_ball_machine_node");
+	//Vector3 _vec = Vector3(.2+sin(_timer), cos(_timer), .4+sin(_timer));
 	//_node->rotate(_vec,Radian(45*(Math::PI/180)) * _dt);
 
 
 	//does not work with 1.7 SDK
-	//StandardFrameListener::updateStats();
+	StandardFrameListener::updateStats();
 	return true;
 }
 
@@ -40,6 +41,11 @@ bool OgreApplicationFrameListener::frameEnded(const FrameEvent& evt)
 bool OgreApplicationFrameListener::processUnbufferedKeyInput(const Ogre::FrameEvent &evt)
 {
 	if(mKeyboard->isKeyDown(OIS::KC_G)){
+		std::vector<OgreNewt::Body*>& _bodies = DataManager::getInstance()->getBodiesVec();
+		for(int i=0; i <_bodies.size(); i++)
+		{
+			_bodies[i]->setStandardForceCallback();
+		}
 	}
 
 	return StandardFrameListener::processUnbufferedKeyInput(evt);

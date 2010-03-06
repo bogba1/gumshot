@@ -8,6 +8,8 @@
 #include "../res/resource.h"
 #endif
 
+using namespace OgreNewt;
+
 class OgreApplication : public StandardApplication
 {
 	public:
@@ -21,8 +23,16 @@ class OgreApplication : public StandardApplication
 		void					createScene(void);
 		void					createFrameListener(void);
 		void					createLights(void);
+		void					setupGumMachines(void);
+		void					setupBubbleGums(const int size, const int quantity, const Vector3& offset, const Ogre::String machineNod);
+		void					createMaterialPair(MaterialID* mat1, MaterialID* mat2, ContactCallback* callback, float softness,
+												   float elasticity, float frictionStatic, float frictionKinetic);
 
-		OgreNewt::World*				_world;
-		OgreNewt::BasicFrameListener*	_physicFrameListener;
+	private:
+		World*					_world;
+		BasicFrameListener*		_physicFrameListener;
+		MaterialID*				_matResponsePoint;
+		MaterialID*				_matInnerBarricade;
+		MaterialID*				_matGums;
 
 };

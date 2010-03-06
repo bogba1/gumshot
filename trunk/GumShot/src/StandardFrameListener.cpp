@@ -13,7 +13,7 @@ void StandardFrameListener::updateStats(void)
 	// update stats when necessary
 	try 
 	{
-		/*
+		
 		OverlayElement* guiAvg = OverlayManager::getSingleton().getOverlayElement("Core/AverageFps");
 		OverlayElement* guiCurr = OverlayManager::getSingleton().getOverlayElement("Core/CurrFps");
 		OverlayElement* guiBest = OverlayManager::getSingleton().getOverlayElement("Core/BestFps");
@@ -33,7 +33,7 @@ void StandardFrameListener::updateStats(void)
 
 		OverlayElement* guiDbg = OverlayManager::getSingleton().getOverlayElement("Core/DebugText");
 		guiDbg->setCaption(mDebugText);
-		*/
+		
 	}
 	catch(...) 
 	{ 

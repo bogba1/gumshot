@@ -1,5 +1,4 @@
-
-material gs_spheere
+material glas_spheere_mat
 {
 	technique
 	{
@@ -9,10 +8,11 @@ material gs_spheere
 			cull_hardware none
 			cull_software none
 			depth_check off
-			scene_blend alpha_blend 
+			scene_blend alpha_blend
 			ambient 1 1 1 0
 			diffuse 0 0 1 0.4
-			specular 0.6 0.6 0.6 0.3 25.6
+			specular 0.5 0.5 0.5 0.4 25.6
+			emissive 0.28926 0.28926 0.28926 0.4
 		}
 
 	}
@@ -21,21 +21,42 @@ material gs_spheere
 
 
 
-material lambert1
+material sockel_mat
 {
 	technique
 	{
 		pass
 		{
-			ambient 0 0 0 1
-			diffuse 0.299 0.385807 1 1
+			ambient 0.5 0.5 0.5 1
+			diffuse 0.8843 0.8843 0.8843 1
+			specular 0.7438 0.7438 0.7438 1 89.6
 		}
 
 	}
 
 }
 
-material planeMat
+
+material invisible_mat
+{
+	technique
+	{
+		pass
+		{
+			lighting on
+			cull_hardware none
+			cull_software none
+			depth_check off
+			scene_blend alpha_blend
+			ambient 0 0 0 0
+			diffuse 0 0 0 0
+		}
+
+	}
+
+}
+
+material plane_mat
 {
 	technique
 	{
@@ -50,3 +71,18 @@ material planeMat
 }
 
 
+material gum_green_mat
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.6281 0.6281 0.6281 1
+			diffuse 0 0.395 0.0590526 1
+			specular 0.5 0.5 0.5 1 6
+			emissive 0.08264 0.08264 0.08264 1
+		}
+
+	}
+
+}
