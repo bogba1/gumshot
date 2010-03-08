@@ -40,12 +40,26 @@ bool OgreApplicationFrameListener::frameEnded(const FrameEvent& evt)
 
 bool OgreApplicationFrameListener::processUnbufferedKeyInput(const Ogre::FrameEvent &evt)
 {
-	if(mKeyboard->isKeyDown(OIS::KC_G)){
+	//enable gravity
+	if(mKeyboard->isKeyDown( OIS::KC_G ))
+	{
 		std::vector<OgreNewt::Body*>& _bodies = DataManager::getInstance()->getBodiesVec();
 		for(int i=0; i <_bodies.size(); i++)
 		{
 			_bodies[i]->setStandardForceCallback();
 		}
+	}
+
+	//plotter turn-action
+	if( mKeyboard->isKeyDown( OIS::KC_T ))
+	{
+		std::vector<OgreNewt::Body*>& _bodies = DataManager::getInstance()->getBodiesVec();
+		for(int i=0; i<_bodies.size(); i++)
+		{
+			_bodies[i]->addImpulse( Vector3(2, -1, 4), Vector3(0,0,0) );
+		}
+		Ogre::Radian _angle = (Radian)Math::DegreesToRadians( 90 ) * evt.timeSinceLastFrame;
+		_sceneManager->getSceneNode( "gs_plotter_turnthing")->roll( _angle );
 	}
 
 	return StandardFrameListener::processUnbufferedKeyInput(evt);
