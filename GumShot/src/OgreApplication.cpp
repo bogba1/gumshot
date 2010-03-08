@@ -1,5 +1,6 @@
 #include "OgreApplication.h"
 #include "DataManager.h"
+#include <Newton.h>
 
 
 OgreApplication::OgreApplication() 
@@ -10,6 +11,7 @@ OgreApplication::OgreApplication()
 	_matGums = new MaterialID(_world);
 	_matInnerBarricade = new MaterialID(_world);
 	_matResponsePoint = new MaterialID(_world);
+	srand(time(NULL));
 }
 
 //------------------------------------------------------
@@ -50,11 +52,20 @@ bool OgreApplication::configure()
 
 void OgreApplication::createScene()
 {
-	_sceneManager->setShadowTechnique(ShadowTechnique::SHADOWTYPE_STENCIL_ADDITIVE);
-	_sceneManager->setShadowFarDistance(1000);
-	setupGumMachines();
-	setupBubbleGums( 1, 10, Vector3(0, 18, 0 ), "gs_gummachine_1" );
+	_sceneManager->setShadowTechnique( ShadowTechnique::SHADOWTYPE_STENCIL_ADDITIVE );
+	_sceneManager->setShadowFarDistance( 1000 );
+
+	//create gum machines
+	//setupGumMachine( Vector3(-10,0,0), "gs_gum_machine_1" );
+	//setupBubbleGums( 1, 10, Vector3(0, 18, 0 ), "gs_gum_machine_1" );
+
+	//setupGumMachine( Vector3(10,0,0), "gs_gum_machine_2" );
+	//setupBubbleGums( 1, 10, Vector3(0, 18, 0 ), "gs_gum_machine_2" );
 	
+	//create plotter
+	setupPlotter(Vector3(0,0,-10), "gs_plotter" );
+	setupBubbleGums( 1, 10, Vector3(0, 18, 0 ), "gs_plotter" );
+
 	createMaterialPair(_matGums, _matResponsePoint, &_gumBarricadeResp, 0.3f, 0.5f, 0.08f, 0.08f);
 	createMaterialPair(_matGums, _matGums, &_gumGumResp, 0, 0, 0.3f, 0.2f);
 
@@ -106,20 +117,20 @@ void OgreApplication::createLights()
 
 }
 
-void OgreApplication::setupGumMachines()
+void OgreApplication::setupGumMachine(const Vector3& position, const String& parentNode)
 {
 	//Gummachine 1
 	//visible part of the gummachine
-	Entity* _entity = _sceneManager->createEntity( "gs_sockel_glas", "gs_sockel_glas.mesh" );
+	Entity* _entity = _sceneManager->createEntity( parentNode + "_sockel_glas", "gs_sockel_glas.mesh" );
 	_entity->setCastShadows( true );
-	SceneNode* _node = _sceneManager->getRootSceneNode()->createChildSceneNode( "gs_gummachine_1" );
+	SceneNode* _node = _sceneManager->getRootSceneNode()->createChildSceneNode( parentNode );
 	_node->attachObject( _entity );
 
 
 	//inner transparent barricade (bounce of the gums)
-	_entity = _sceneManager->createEntity("gs_inner_barricade", "gs_inner_barricade.mesh");
+	_entity = _sceneManager->createEntity( parentNode + "_barricade", "gs_inner_barricade.mesh");
 	_entity->setCastShadows( false );
-	SceneNode* _childNode = _node->createChildSceneNode( "inner_barricade" ); //no creation over _scenemangager due to adding this as child of node "gs_gummachine_1"
+	SceneNode* _childNode = _node->createChildSceneNode( parentNode + "_barricade" ); //no creation over _scenemangager due to adding this as child of node "gs_gummachine_1"
 	_childNode->attachObject( _entity );
 
 	//collisionshape of the barricade
@@ -131,9 +142,9 @@ void OgreApplication::setupGumMachines()
 	_body->setMaterialGroupID( _matInnerBarricade ); //matgroupID for collresponse
 
 	//response point
-	_entity = _sceneManager->createEntity("gs_response_point", "gs_response_point.mesh");
+	_entity = _sceneManager->createEntity( parentNode + "_rpoint", "gs_response_point.mesh");
 	_entity->setCastShadows( false );
-	_childNode = _node->createChildSceneNode( "gs_response_point" );
+	_childNode = _node->createChildSceneNode( parentNode + "_rpoint" );
 	_childNode->attachObject( _entity );
 
 	_colShape = new CollisionPrimitives::TreeCollisionSceneParser( _world );
@@ -142,9 +153,62 @@ void OgreApplication::setupGumMachines()
 	_body->setPositionOrientation(Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
 	_body->attachNode( _childNode );
 	_body->setMaterialGroupID( _matResponsePoint ); //matgroupID for colliresponse
+
+	_node->translate( position );
 }
 
-void OgreApplication::setupBubbleGums(const int size, const int quantity, const Vector3& offset, const Ogre::String machineNode)
+void OgreApplication::setupPlotter(const Vector3& position, const String& parentNode)
+{
+	//visible part of the plotter
+	Entity* _entity = _sceneManager->createEntity( parentNode, "gs_plotter.mesh" );
+	_entity->setCastShadows( true );
+	SceneNode* _node = _sceneManager->getRootSceneNode()->createChildSceneNode( parentNode );
+	_node->attachObject( _entity );
+
+
+	//inner transparent barricade (bounce of the gums)
+	_entity = _sceneManager->createEntity( parentNode + "_barricade", "gs_plotter_inner_barricade.mesh");
+	_entity->setCastShadows( false );
+	SceneNode* _childNode = _node->createChildSceneNode( parentNode + "_barricade" ); //no creation over _scenemangager due to adding this as child of node "gs_gummachine_1"
+	_childNode->attachObject( _entity );
+
+	//collisionshape of the barricade
+	CollisionPrimitives::TreeCollisionSceneParser* _colShape = new CollisionPrimitives::TreeCollisionSceneParser( _world );
+	_colShape->parseScene( _childNode, 1 );
+	OgreNewt::Body* _body = new OgreNewt::Body(_world, (CollisionPtr) _colShape); 
+	_body->setPositionOrientation(Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
+	_body->attachNode( _childNode );
+	_body->setMaterialGroupID( _matInnerBarricade ); //matgroupID for collresponse
+
+	//turnthing
+	_entity = _sceneManager->createEntity( parentNode + "_turnthing", "gs_plotter_turnthing.mesh");
+	_entity->setCastShadows( false );
+	_childNode = _node->createChildSceneNode( parentNode + "_turnthing" );
+	_childNode->attachObject( _entity );
+
+	_colShape = new CollisionPrimitives::TreeCollisionSceneParser( _world );
+	_colShape->parseScene( _childNode, 2 );
+	_body = new OgreNewt::Body( _world, (CollisionPtr) _colShape ); 
+	_body->setPositionOrientation(Ogre::Vector3(0, 6.376, 0), Ogre::Quaternion::IDENTITY);
+	_body->attachNode( _childNode );
+
+	//ramp
+	_entity = _sceneManager->createEntity( parentNode + "_ramp", "gs_plotter_ramp.mesh");
+	_entity->setCastShadows( false );
+	_childNode = _node->createChildSceneNode( parentNode + "_ramp" );
+	_childNode->attachObject( _entity );
+
+	_colShape = new CollisionPrimitives::TreeCollisionSceneParser( _world );
+	_colShape->parseScene( _childNode, 3 );
+	_body = new OgreNewt::Body( _world, (CollisionPtr) _colShape ); 
+	_body->setPositionOrientation(Ogre::Vector3(0, 0, 0), Ogre::Quaternion::IDENTITY);
+	_body->attachNode( _childNode );
+
+	_node->translate( position );
+
+}
+
+void OgreApplication::setupBubbleGums(const int size, const int quantity, const Vector3& offset, const String& machineNode)
 {
 	float _angleStep = (2.0f * Ogre::Math::PI) / quantity;
 	int _namingNmbr = 0;
@@ -154,7 +218,7 @@ void OgreApplication::setupBubbleGums(const int size, const int quantity, const 
 		for(int u=0; u < quantity; u++)
 		{
 			std::ostringstream oss;
-			oss << "gs_gum_" << ( _namingNmbr );
+			oss << machineNode << "_gum_" << ( _namingNmbr );
 			int _sSz = 10; //size of the transparent collsphere
 			
 			// _angleStep * i = phi
@@ -168,14 +232,15 @@ void OgreApplication::setupBubbleGums(const int size, const int quantity, const 
 			//creating entity + node
 			Entity* _entity = _sceneManager->createEntity( oss.str(), "gs_gum.mesh" );
 			_entity->setCastShadows( true );
-			SceneNode* _node = _sceneManager->getSceneNode( "gs_gummachine_1" )->createChildSceneNode( oss.str() + "_node" );
+			SceneNode* _node = _sceneManager->getSceneNode( machineNode )->createChildSceneNode( oss.str() + "_node" );
 			_node->attachObject( _entity );
+			_node->setScale(size, size, size);
 			
 			//creating collsphape, body
 			ConvexCollisionPtr _colShape = ConvexCollisionPtr( new CollisionPrimitives::Ellipsoid( _world, Vector3(size, size, size),_namingNmbr ) );
 			OgreNewt::Body* _body = new OgreNewt::Body( _world, _colShape );
 			_body->attachNode( _node );
-			_body->setPositionOrientation(_accPos + offset, Ogre::Quaternion::IDENTITY);
+			_body->setPositionOrientation( _accPos + offset + _node->getPosition(), Ogre::Quaternion::IDENTITY );
 			
 			//setting mass, center of mass, materialID
 			Vector3 _inertia, _offset;
