@@ -56,11 +56,11 @@ void OgreApplication::createScene()
 	_sceneManager->setShadowFarDistance( 1000 );
 
 	//create gum machines
-	//setupGumMachine( Vector3(-10,0,0), "gs_gum_machine_1" );
-	//setupBubbleGums( 1, 10, Vector3(0, 18, 0 ), "gs_gum_machine_1" );
+	setupGumMachine( Vector3(-10,0,0), "gs_gum_machine_1" );
+	setupBubbleGums( 1, 10, Vector3(0, 18, 0 ), "gs_gum_machine_1" );
 
-	//setupGumMachine( Vector3(10,0,0), "gs_gum_machine_2" );
-	//setupBubbleGums( 1, 10, Vector3(0, 18, 0 ), "gs_gum_machine_2" );
+	setupGumMachine( Vector3(10,0,0), "gs_gum_machine_2" );
+	setupBubbleGums( 1, 10, Vector3(0, 18, 0 ), "gs_gum_machine_2" );
 	
 	//create plotter
 	setupPlotter(Vector3(0,0,-10), "gs_plotter" );
