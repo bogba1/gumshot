@@ -53,5 +53,38 @@ bool OgreApplicationFrameListener::processUnbufferedKeyInput(const Ogre::FrameEv
 
 bool OgreApplicationFrameListener::processUnbufferedMouseInput(const FrameEvent& evt)
 {
+	const OIS::MouseState &ms=mMouse->getMouseState();
+	if(ms.buttonDown(OIS::MB_Left)){
+		Ogre::RaySceneQuery* _rayQuery=_sceneManager->createRayQuery(Ray());
+		Ogre::Real _offsetX=ms.X.abs/ms.width;
+		Ogre::Real _offsetY=ms.Y.abs/ms.height;
+		Ogre::Ray _ray=_cam->getCameraToViewportRay(_offsetX, _offsetY);
+		_rayQuery->setRay(_ray);
+		_rayQuery->setSortByDistance(true);
+		//_rayQuery->setQueryMask(~100);
+
+		RaySceneQueryResult& _rayResult=_rayQuery->execute();
+		// der erste
+		RaySceneQueryResult::iterator i=_rayResult.begin();
+		if(!_rayResult.empty()){
+			bool find=false;
+			while(!find && i!=_rayResult.end()){
+				if(i->movable){
+					Ogre::String name=i->movable->getParentSceneNode()->getName();
+					if(name!="gs_gummachine_1" && name!="inner_barricade"){
+						i->movable->getParentSceneNode()->showBoundingBox(true);
+						find=true;
+					}else
+						i++;
+				}
+			}
+		}
+		// alle treffer
+		/*for(RaySceneQueryResult::iterator i=_rayResult.begin(); i!=_rayResult.end(); i++){
+			if(i->movable){
+				i->movable->getParentSceneNode()->showBoundingBox(true);
+			}
+		}*/
+	}
 	return StandardFrameListener::processUnbufferedMouseInput(evt);
 }
